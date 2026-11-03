@@ -7,19 +7,20 @@
 nectarload(BL)
 }
 \arguments{
-\item{BL}{vector of body length measurements (mm).}
+\item{BL}{A nonempty numeric vector of finite, positive body lengths (mm), without missing values.}
 }
 \value{
-A dataframe with bee total field nectar load (ul) is returned for each specimen.
+A numeric vector of total field nectar load estimates in microlitres, one per input measurement.
 }
 \description{
-Calculates total field nectar load (ul) using body length (mm) from Henry & Rodet (2008).
+Calculates total field nectar load (ul) using body length (mm) from Henry & Rodet (2018).
 }
 \examples{
 nectarload(BL=c(10,5,2))
 }
 \references{
-Kendall et al. (2018)  Pollinator size and its consequences: Predictive allometry for pollinating insects. <doi:10.1101/397604>
-
-Henry, M., & Rodet, G. (2018). Controlling the impact of the managed honeybee on wild bees in protected areas. Scientific reports, 8(1), 9308.
+\itemize{
+\item Kendall et al. (2019) Pollinator size and its consequences: Robust estimates of body size in pollinating insects. Ecology and Evolution, 9(4), 1702-1714. \doi{10.1002/ece3.4835}.
+\item Henry, M., & Rodet, G. (2018). Controlling the impact of the managed honeybee on wild bees in protected areas. Scientific reports, 8(1), 9308. \doi{10.1038/s41598-018-27591-y}.
+}
 }

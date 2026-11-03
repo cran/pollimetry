@@ -1,23 +1,30 @@
 Package: pollimetry
 Type: Package
 Title: Estimate Pollinator Body Size and Co-Varying Ecological Traits
-Version: 1.0.1
-Date: 2018-11-19
+Version: 1.1.1
 Authors@R: c(person("Liam","Kendall", email = "liam.k.kendall@gmail.com",role=c("aut","cre")),
-  person("Ignasi","Bartomeus", email = "nacho.bartomeus@gmail.com",role="aut"),
-  person("Louis","Sutter",role="ctb"))
+           person("Ignasi","Bartomeus", email = "nacho.bartomeus@gmail.com",role="aut"))
 Maintainer: Liam Kendall <liam.k.kendall@gmail.com>
-Description: Tools to estimate pollinator body size and co-varying traits. This package contains novel Bayesian predictive models of pollinator body size (for bees and hoverflies) as well as preexisting predictive models for pollinator body size (currently implemented for ants, bees, butterflies, flies, moths and wasps) as well as bee tongue length and foraging distance, total field nectar loads and wing loading. An additional GitHub repository <https://github.com/liamkendall/pollimetrydata> provides model objects to use the bodysize function internally. All models are described in Kendall et al (2018) <doi:10.1101/397604>.
-Depends: R (>= 3.0.0), brms (>= 2.4.0)
-Imports: stats, repmis
-Suggests: rstan, pollimetrydata
+Description: Tools to estimate pollinator body size and co-varying traits. This package contains
+           Bayesian predictive models of pollinator body size (for bees and hoverflies) and
+           bee foraging range, as well as preexisting predictive models for pollinator body size
+           (currently implemented for ants, bees, butterflies, flies, moths and wasps), bee tongue
+           length, foraging range, total field nectar loads and wing loading. An additional GitHub
+           repository <https://github.com/liamkendall/pollimetrydata> provides model objects to use
+           the bodysize and foraging.range functions internally. The Bayesian models are described in Kendall
+           et al. (2019) <doi:10.1002/ece3.4835> & Kendall et al. (2022) <doi:10.1002/ecy.3809>.
+Depends: R (>= 4.0.0)
+Imports: stats, utils, lifecycle, brms (>= 2.16.1)
+Suggests: pollimetrydata (>= 1.0.1)
 License: GPL (>= 2)
 LazyData: true
-RoxygenNote: 6.1.1
+Encoding: UTF-8
+Config/roxygen2/version: 8.1.1
+URL: https://github.com/liamkendall/pollimetry
+BugReports: https://github.com/liamkendall/pollimetry/issues
 NeedsCompilation: no
-Packaged: 2018-11-19 01:40:57 UTC; liamkendall
+Packaged: 2026-11-03 07:10:16 UTC; liamkendall
 Author: Liam Kendall [aut, cre],
-  Ignasi Bartomeus [aut],
-  Louis Sutter [ctb]
+  Ignasi Bartomeus [aut]
 Repository: CRAN
-Date/Publication: 2018-11-19 12:20:08 UTC
+Date/Publication: 2026-11-03 09:00:17 UTC

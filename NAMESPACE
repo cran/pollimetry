@@ -2,6 +2,7 @@
 
 export(bodysize)
 export(foragedist)
+export(foraging.range)
 export(headwidthsize)
 export(lengthsize)
 export(lengthwidthsize)
@@ -9,7 +10,8 @@ export(nectarload)
 export(tonguelength)
 export(wingloading)
 import(brms)
-importFrom(stats,lm)
-importFrom(stats,predict)
+importFrom(stats,
+  lm,
+  predict
+)
 importFrom(utils,data)
-importFrom(utils,installed.packages)

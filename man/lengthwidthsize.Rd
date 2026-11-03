@@ -7,21 +7,29 @@
 lengthwidthsize(BLW, Eq = "DIP")
 }
 \arguments{
-\item{BLW}{A vector of fly body length*body width measurments (mm).}
+\item{BLW}{A nonempty numeric vector of body length multiplied by body width, in square millimetres (mm squared). All values must be finite, strictly positive and nonmissing.}
 
-\item{Eq}{a vector of a predictive allometry for Diptera, Hymenoptera or Lepidoptera. Options implemented are:}
+\item{Eq}{A single character string selecting an equation or the LEP group. Options implemented are:
+\itemize{
+\item Diptera: Brachycera, Cyclorrapha, DIP (the default general Diptera equation), Nematocera.
+\item Hymenoptera: S93HBLW, S93HFLW, S93HHLW, S93HILW, S93HALW, S93HPLW, S93HVLW.
+\item Lepidoptera: S93LGLW, S93LMLW, S93LALW, W13LLW, S93LCLW, S93LNLW. LEP returns W13LLW and S93LALW, in that order.
+}}
 }
 \value{
-A dataframe with body size, as dry weight (mg) is returned for each specimen from selected equation.
+A numeric vector of predicted dry weights (mg) for one equation, or a numeric matrix for a group of equations. Matrix rows follow input order and columns are named by equation.
 }
 \description{
-Calculates body size as dry weight (mg) from the equations described by Sample (1993) and others using body length*body width values (mm).
+Calculates body size as dry weight (mg) from the equations described by Sample (1993) and others using body length multiplied by body width (mm squared).
 }
 \examples{
-lengthwidthsize(BLW=c(3,5,2), Eq = c("Brachycera"))
+lengthwidthsize(BLW = c(3, 5, 2), Eq = "Brachycera")
+lengthwidthsize(BLW = c(3, 5, 2))
+lengthwidthsize(BLW = c(3, 5, 2), Eq = "LEP")
 }
 \references{
-Kendall et al. (2018) Pollinator size and its consequences: Predictive allometry for pollinating insects. <doi:10.1101/397604>
-
-Sample et al. (1993) Estimation of insect biomass by length and width. American Midland Naturalist, 234-240.
+\itemize{
+\item Kendall et al. (2019) Pollinator size and its consequences: Robust estimates of body size in pollinating insects. \emph{Ecology and Evolution}, 9(4), 1702-1714. \doi{10.1002/ece3.4835}.
+\item Sample et al. (1993) Estimation of insect biomass by length and width. \emph{American Midland Naturalist}, 234-240.
+}
 }

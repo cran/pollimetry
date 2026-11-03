@@ -2,29 +2,35 @@
 % Please edit documentation in R/tonguelength.R
 \name{tonguelength}
 \alias{tonguelength}
-\title{Converts ITD (cm) to tongue length for bees.}
+\title{Converts ITD (mm) to tongue length for bees.}
 \usage{
 tonguelength(x, mouthpart = "all")
 }
 \arguments{
-\item{x}{A dataframe with the following two columns: bee intertegular distance (IT) measurments in mm and Family, a vector of bee families. Only implemented 5 out of the extant 7 families: 
-"Andrenidae", "Apidae", "Colletidae", "Halictidae", "Megachilidae".}
+\item{x}{A dataframe with the following two columns: IT (finite, positive intertegular distance in mm) and Family (capital F). Missing measurements are not accepted. Only six out of the extant seven families are implemented:
+"Andrenidae", "Apidae", "Colletidae", "Halictidae", "Melittidae" and "Megachilidae".}
 
-\item{mouthpart}{The mouth part you are interested in. Options are "all", glossa", "prementum" and "tongue" (i.e. gloss + prementum)}
+\item{mouthpart}{The mouthpart you are interested in. Options are: "all", "glossa", "prementum" and "tongue" (i.e. glossa + prementum)}
 }
 \value{
-A dataframe with bee tongue length (mm) and 95% confidence intervals are returned for each bees species along with your original dataframe.
+The input data frame with predicted mouthpart lengths (mm) and 95% confidence bounds appended. The glossa-only result is named Glossa.
 }
 \description{
-Calculates tongue length (mm) from Cariveau et al. (2015) using intertegular distance (ITD) values (cm)..
+Calculates tongue length (mm) from Cariveau et al. (2016) and Melin et al. (2019) using intertegular distance (ITD) values (mm).
+}
+\details{
+Models are fitted to tongue_dataset, which combines the Cariveau data with species means from Melin et al. (2019). Predictions and confidence bounds are exponentiated from the natural-log scale. They describe fitted geometric means, not arithmetic means or individual prediction intervals. Total tongue length is modelled separately, so its prediction need not equal the sum of separately predicted glossa and prementum lengths. No data are downloaded during a call.
 }
 \examples{
 example=cbind.data.frame(IT=c(1.3,2.3),
                          Family=c("Andrenidae","Apidae"))
 tonguelength(example,mouthpart="all")
+
 }
 \references{
-Kendall et al. (2018)  Pollinator size and its consequences: Predictive allometry for pollinating insects. <doi:10.1101/397604>
-
-Cariveau et al. (2016) The allometry of bee tongue length an its uses in ecology and evolution. PLoS ONE 11(3): e0151482 <doi:10.1371/journal.pone.0151482>
+\itemize{
+\item Kendall et al. (2019) Pollinator size and its consequences: Robust estimates of body size in pollinating insects. \emph{Ecology and Evolution}, 9(4), 1702-1714. \doi{10.1002/ece3.4835}.
+\item Cariveau et al. (2016) The Allometry of Bee Proboscis Length and Its Uses in Ecology. \emph{PLOS ONE}, 11(3): e0151482. \doi{10.1371/journal.pone.0151482}.
+\item Melin et al. (2019) The allometry of proboscis length in Melittidae (Hymenoptera: Apoidae) and an estimate of their foraging distance using museum collections. \emph{PLOS ONE}, 14(6), e0217839. \doi{10.1371/journal.pone.0217839}.
+}
 }
