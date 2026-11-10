@@ -4,9 +4,10 @@
 #' @param x A nonempty data frame with positive, finite ITD measurements in mm. Sex (Female or Male) is required except for type = "ITD". Taxonomic models also require Family for bees or Subfamily for hoverflies. Accepted hoverfly subfamilies are Eristalinae, Pipizinae and Syrphinae. Optional grouping columns are Region and Species (Genus_species); Species requires Region. The phylogenetic model requires both Region and Species.
 #' @param taxa One string: "bee" or "hov".
 #' @param type One string: "taxo", "sex", "ITD", or "phylo" (bees only).
-#' @return The input data frame with Est.Weight, CI_Lower and CI_Upper appended, in mg. Bounds are the 5th and 95th percentiles of the posterior predictive distribution.
-#' @details With Region and Species, both fitted grouping effects are included. With Region alone, only the regional effect is included. With neither, group effects are excluded (set to zero, not integrated out). Species alone is rejected because the fitted species effect is nested within Region. New grouping levels use brms uncertainty sampling from existing levels; this does not place a new species on a phylogenetic tree. Fixed-effect categories must be supported by the fitted model. Est.Weight is exp(mean(log-scale predictive draws)), not arithmetic mean weight. Intervals include residual variation. Use set.seed() for reproducibility. Requires brms. Uses pollimetrydata (>= 1.0.1) when installed; otherwise downloads only the required fitted models from GitHub. Downloaded models are cached in memory for the current R session. An internet connection is required for each model's first download in a session. No Bayesian models are fitted during prediction.
-#' @examples if (requireNamespace("pollimetrydata", quietly = TRUE) && 
+#' @return The input data frame with Est.Weight and 95 percent Bayesian credible intervals (CI_Lower and CI_Upper) appended, in mg.
+#' @details With Region and Species, both fitted grouping effects are included. With Region alone, the regional effect is included. Population-level predictions use group effects set to zero. Species requires Region because the fitted species effect is nested within Region. New grouping levels use brms uncertainty sampling from existing levels. Fixed-effect categories must be supported by the fitted model. Estimates are back-transformed means with 95 percent Bayesian credible intervals, expressed in milligrams. Uses fitted models from pollimetrydata (>= 1.0.1) when installed, or downloads the required models from GitHub and caches them for the current R session.
+#' @examples
+#' if (requireNamespace("pollimetrydata", quietly = TRUE) &&
 #' utils::packageVersion("pollimetrydata") >= "1.0.1") {
 #'   x <- data.frame(ITD = c(1.5, 2), Sex = c("Female", "Male"),
 #'                   Subfamily = c("Pipizinae", "Syrphinae"))
@@ -45,10 +46,13 @@ bodysize <- function(x, taxa, type) {
   }
   newdata <- x
   newdata$IT <- x$ITD
-  out <- exp(stats::predict(mod, newdata = newdata, allow_new_levels = TRUE,
-                            sample_new_levels = "uncertainty", re_formula = re,
-                            probs = c(0.05, 0.95), cores = 1))
-  out <- as.data.frame(out[, c("Estimate", "Q5", "Q95"), drop = FALSE])
+  mu <- brms::posterior_epred(mod, newdata = newdata,
+                              allow_new_levels = TRUE,
+                              sample_new_levels = "uncertainty", re_formula = re)
+  bounds <- t(apply(exp(mu), 2L, stats::quantile,
+                    probs = c(0.025, 0.975), names = FALSE))
+  out <- data.frame(Estimate = exp(colMeans(mu)),
+                    Q2.5 = bounds[, 1L], Q97.5 = bounds[, 2L])
   names(out) <- c("Est.Weight", "CI_Lower", "CI_Upper")
   cbind(x, out)
 }

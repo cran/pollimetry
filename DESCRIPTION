@@ -1,7 +1,7 @@
 Package: pollimetry
 Type: Package
 Title: Estimate Pollinator Body Size and Co-Varying Ecological Traits
-Version: 1.1.1
+Version: 1.1.1-1
 Authors@R: c(person("Liam","Kendall", email = "liam.k.kendall@gmail.com",role=c("aut","cre")),
            person("Ignasi","Bartomeus", email = "nacho.bartomeus@gmail.com",role="aut"))
 Maintainer: Liam Kendall <liam.k.kendall@gmail.com>
@@ -23,8 +23,8 @@ Config/roxygen2/version: 8.1.1
 URL: https://github.com/liamkendall/pollimetry
 BugReports: https://github.com/liamkendall/pollimetry/issues
 NeedsCompilation: no
-Packaged: 2026-11-03 07:10:16 UTC; liamkendall
+Packaged: 2026-11-09 21:44:51 UTC; liamkendall
 Author: Liam Kendall [aut, cre],
   Ignasi Bartomeus [aut]
 Repository: CRAN
-Date/Publication: 2026-11-03 09:00:17 UTC
+Date/Publication: 2026-11-10 08:10:15 UTC

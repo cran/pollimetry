@@ -7,19 +7,19 @@
 tonguelength(x, mouthpart = "all")
 }
 \arguments{
-\item{x}{A dataframe with the following two columns: IT (finite, positive intertegular distance in mm) and Family (capital F). Missing measurements are not accepted. Only six out of the extant seven families are implemented:
+\item{x}{A data frame with IT (finite, positive intertegular distance in mm) and Family. Supported families are:
 "Andrenidae", "Apidae", "Colletidae", "Halictidae", "Melittidae" and "Megachilidae".}
 
 \item{mouthpart}{The mouthpart you are interested in. Options are: "all", "glossa", "prementum" and "tongue" (i.e. glossa + prementum)}
 }
 \value{
-The input data frame with predicted mouthpart lengths (mm) and 95% confidence bounds appended. The glossa-only result is named Glossa.
+The input data frame with predicted mouthpart lengths (mm) and 95 percent confidence bounds appended. The glossa-only result is named Glossa.
 }
 \description{
 Calculates tongue length (mm) from Cariveau et al. (2016) and Melin et al. (2019) using intertegular distance (ITD) values (mm).
 }
 \details{
-Models are fitted to tongue_dataset, which combines the Cariveau data with species means from Melin et al. (2019). Predictions and confidence bounds are exponentiated from the natural-log scale. They describe fitted geometric means, not arithmetic means or individual prediction intervals. Total tongue length is modelled separately, so its prediction need not equal the sum of separately predicted glossa and prementum lengths. No data are downloaded during a call.
+Models are fitted to tongue_dataset, which combines measurements from Cariveau et al. (2016) and Melin et al. (2019). Estimates are back-transformed means with 95 percent confidence intervals, expressed in millimetres. Separate models estimate glossa, prementum and total tongue length.
 }
 \examples{
 example=cbind.data.frame(IT=c(1.3,2.3),

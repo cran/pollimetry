@@ -4,13 +4,13 @@
 #'
 #' @description Calculates tongue length (mm) from Cariveau et al. (2016) and Melin et al. (2019) using intertegular distance (ITD) values (mm).
 #'
-#' @param x A dataframe with the following two columns: IT (finite, positive intertegular distance in mm) and Family (capital F). Missing measurements are not accepted. Only six out of the extant seven families are implemented:
+#' @param x A data frame with IT (finite, positive intertegular distance in mm) and Family. Supported families are:
 #' "Andrenidae", "Apidae", "Colletidae", "Halictidae", "Melittidae" and "Megachilidae".
 #'
 #' @param mouthpart The mouthpart you are interested in. Options are: "all", "glossa", "prementum" and "tongue" (i.e. glossa + prementum)
 #'
-#' @return The input data frame with predicted mouthpart lengths (mm) and 95% confidence bounds appended. The glossa-only result is named Glossa.
-#' @details Models are fitted to tongue_dataset, which combines the Cariveau data with species means from Melin et al. (2019). Predictions and confidence bounds are exponentiated from the natural-log scale. They describe fitted geometric means, not arithmetic means or individual prediction intervals. Total tongue length is modelled separately, so its prediction need not equal the sum of separately predicted glossa and prementum lengths. No data are downloaded during a call.
+#' @return The input data frame with predicted mouthpart lengths (mm) and 95 percent confidence bounds appended. The glossa-only result is named Glossa.
+#' @details Models are fitted to tongue_dataset, which combines measurements from Cariveau et al. (2016) and Melin et al. (2019). Estimates are back-transformed means with 95 percent confidence intervals, expressed in millimetres. Separate models estimate glossa, prementum and total tongue length.
 #'
 #' @examples
 #' example=cbind.data.frame(IT=c(1.3,2.3),
@@ -22,9 +22,6 @@
 #' \item Cariveau et al. (2016) The Allometry of Bee Proboscis Length and Its Uses in Ecology. \emph{PLOS ONE}, 11(3): e0151482. \doi{10.1371/journal.pone.0151482}.
 #' \item Melin et al. (2019) The allometry of proboscis length in Melittidae (Hymenoptera: Apoidae) and an estimate of their foraging distance using museum collections. \emph{PLOS ONE}, 14(6), e0217839. \doi{10.1371/journal.pone.0217839}.
 #' }
-#'
-#'
-#'
 #'
 #' @export
 tonguelength <- function(x, mouthpart = "all"){

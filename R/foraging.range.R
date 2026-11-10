@@ -3,11 +3,12 @@
 #' @description Predict realized or potential bee foraging ranges using the models of Kendall et al. (2022).
 #' @param data A nonempty data frame with positive, finite ITD measurements in mm. The social model requires sociality: "Highly Eusocial", "Primitively Eusocial" or "Solitary". Group effects require species in Genus_species format; genus is derived from species.
 #' @param model.type One string: "social" (default) or "ITD". Both models use estimated body weight; the social model also uses sociality.
-#' @param random.effects One string: "reduced" (default, no group effects), "phylo" (genus effect), or "full" (genus and species effects). Publication and metric effects are excluded for all choices.
+#' @param random.effects One string: "reduced" (default, population-level predictions), "phylo" (genus effect), or "full" (genus and species effects).
 #' @param measure.type One string: "realized" (default) or "potential".
-#' @return A data frame with two rows per input specimen, typical then maximum range. range.estimate, range.lower and range.upper are in kilometres; bounds give a 95% posterior predictive interval. wgt is estimated female dry weight in mg and wgt10 is its base-10 logarithm. Additional columns include range.type and, when species is supplied, genus.
-#' @details The response is log10(range in km), so predictions and interval endpoints are back-transformed with 10^x. range.estimate is 10 raised to the mean log10-scale predictive draw, not arithmetic mean distance. Intervals include residual variation. Female body weight is estimated once per input row using the bee sex model without group effects, then reused for both range types. Body-weight uncertainty is not propagated through the range model. Excluded group effects are set to zero, not integrated out. New included grouping levels use uncertainty sampling from existing levels, not a new phylogenetic placement. Use set.seed() for reproducibility. Requires brms. Uses pollimetrydata (>= 1.0.1) when installed; otherwise downloads only the required fitted models from GitHub. Downloaded models are cached in memory for the current R session. An internet connection is required for each model's first download in a session. No Bayesian models are fitted during prediction.
-#' @examples if (requireNamespace("pollimetrydata", quietly = TRUE) && 
+#' @return A data frame with two rows per input specimen, typical then maximum range. Estimated range (range.estimate) and the lower and upper bounds of its 95 percent Bayesian credible interval (range.lower and range.upper) are in kilometres. wgt is estimated female dry weight in mg and wgt10 is its base-10 logarithm. Additional columns include range.type and, when species is supplied, genus.
+#' @details Estimates are back-transformed means with 95 percent Bayesian credible intervals, expressed in kilometres. Female body weight is estimated once per input row using population-level predictions from the bee sex model, then reused for both range types. Range estimates and credible intervals are conditional on this estimated body weight. Group effects selected by random.effects contribute to predictions; the remaining group effects are set to zero. New included grouping levels use uncertainty sampling from existing levels. Uses fitted models from pollimetrydata (>= 1.0.1) when installed, or downloads the required models from GitHub and caches them for the current R session.
+#' @examples
+#' if (requireNamespace("pollimetrydata", quietly = TRUE) &&
 #' utils::packageVersion("pollimetrydata") >= "1.0.1") {
 #'   x <- data.frame(ITD = c(2.9, 2.5),
 #'                   sociality = c("Highly Eusocial", "Solitary"))
@@ -43,8 +44,13 @@ foraging.range <- function(data, model.type = "social",
     if (length(missing)) warning("New ", nm, " levels: ", paste(missing, collapse = ", "), call. = FALSE)
   }
   re <- switch(random.effects, full = ~(1 | genus) + (1 | species), phylo = ~(1 | genus), reduced = NA)
-  out <- 10^stats::predict(mod, newdata = data.out, allow_new_levels = TRUE,
-                            sample_new_levels = "uncertainty", re_formula = re, probs = c(0.025, 0.975), cores = 1)
+  mu <- brms::posterior_epred(mod, newdata = data.out,
+                              allow_new_levels = TRUE,
+                              sample_new_levels = "uncertainty", re_formula = re)
+  bounds <- t(apply(10^mu, 2L, stats::quantile,
+                    probs = c(0.025, 0.975), names = FALSE))
+  out <- data.frame(Estimate = 10^colMeans(mu),
+                    Q2.5 = bounds[, 1L], Q97.5 = bounds[, 2L])
   labels <- c("Typ-Realised" = "Realized typical range", "Typ-Potential" = "Potential typical range",
               "Max-Realised" = "Realized maximum range", "Max-Potential" = "Potential maximum range")
   data.out$range.type <- unname(labels[data.out$range.4])

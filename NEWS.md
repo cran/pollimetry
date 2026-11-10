@@ -1,3 +1,7 @@
+# pollimetry 1.1.1-1
+
+* Standardise bodysize() and foraging.range() to provide posterior back-transformed mean point estimates and 95% Bayesian credible intervals.
+
 # pollimetry 1.1.1
 
 * Introduce Bayesian bee foraging range predictions through foraging.range(), based on Kendall et al. (2022), with typical and maximum realized or potential ranges and 95% posterior predictive intervals.
